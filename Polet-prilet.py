@@ -1,7 +1,7 @@
 # код, написанный для изучения библиотеки tkinter
 from tkinter import *
 from tkinter.ttk import Combobox  # выпадающий список
-
+from tkinter import messagebox
 
 def check():
     resume1.config(text='Цель назначения - ' +
@@ -127,8 +127,12 @@ resume2 = Label(window, text='Проверка стоимости.', font='16', 
 resume2.grid(columnspan=1+2, row=8, padx=x, pady=y)
 
 
+def departure(): #всплывающее окно
+    messagebox.showinfo(' ', 'Прилетели!')
+
+
 # кнопка Полетели
-btn_exit = Button(window, text="Полетели!", bg='#f0f', fg='#000', command=window.destroy)
+btn_exit = Button(window, text="Полетели!", bg='#f0f', fg='#000', command=departure)
 btn_exit.grid(columnspan=1+2, row=9, padx=x, pady=y)
 
 window.mainloop()
