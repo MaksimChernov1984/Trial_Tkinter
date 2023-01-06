@@ -14,7 +14,7 @@ x = 10 # отступ по х
 y = 10 # отступ по у
 
 # всплывающее окно с вопросом
-def clicked_ask():
+def clicked_ask(answ):
     answ = messagebox.askquestion('Вопрос', 'Вы любите искать информацию в интернете?')
     if answ == 'yes':
         messagebox.showinfo('Если да', 'Расскажите о своём любимом поисковике!')
@@ -53,7 +53,7 @@ spin = Spinbox(window, from_=1, to=5, width=5)
 spin.grid(column=1, row=3, padx=x, pady=y)
 
 # появляется надпись при клике, и это должно быть перед кнопкой
-def clicked():
+def clicked(res):
     res = 'Моя любимая поисковая система - ' + combo.get() + ', \nпотому ' \
         'что ' + txt.get() + '. \nКоличество баллов, которые я бы ему дал - ' + spin.get() + '.'
     lbl.configure(text=res, font='16', fg='#fff', bg='#2F4F4F')
@@ -62,6 +62,7 @@ def clicked():
 # кнопка Проверить
 btn_check = Button(window, text='Проверить', bg='#CD5C5C', fg='#fff', command=clicked)
 btn_check.grid(column=0, row=4, padx=x, pady=y)
+btn_check.bind('<Return>', clicked)
 
 # кнопка Выход
 btn_exit = Button(window, text="Выход", command=window.destroy)

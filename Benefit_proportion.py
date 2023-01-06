@@ -13,7 +13,7 @@ y = 10  # отступ по у
 
 
 # вычисление пропорции выгоды
-def clicked():
+def clicked(p1):
     p1 = int(price1.get())
     p2 = int(price2.get())
     m1 = int(mass1.get())
@@ -67,6 +67,7 @@ mass2.grid(column=1, row=4, padx=x, pady=y)
 # кнопка Проверить
 btn_check = Button(window, text='Проверить', bg='#CD5C5C', fg='#fff', command=clicked)
 btn_check.grid(columnspan=1+2, row=5, padx=x, pady=y)
+btn_check.bind('<Return>', clicked)
 
 # вывод по пропорции
 resume = Label(window)

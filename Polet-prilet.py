@@ -1,16 +1,17 @@
 # код, написанный для изучения библиотеки tkinter
 from tkinter import *
-from tkinter.ttk import Combobox  # выпадающий список
+from tkinter.ttk import Combobox
 from tkinter import messagebox
 
-def check():
+def check(ddd):
+    ddd=str(destination.get())
     resume1.config(text='Цель назначения - ' +
                       destination.get() + '\nКоличество человек - ' +
                       passengers.get() + '\nКоличество груза в тоннах - ' +
                       cargo.get() + '\nТариф - ' + tariff.get())
 
 
-def priced():
+def priced(p):
         # коэффициенты
     p = int(passengers.get())  # количество пассажиров
     c = int(cargo.get())  # масса груза в тоннах
@@ -80,6 +81,7 @@ destination['values'] = ('(выберите)', 'Луна', 'Меркурий', '
                          'Ганимед', 'Ио', 'Калисто', 'Европа', 'Титан', 'Титания', 'Тритон', 'Плутон', 'Эрида')
 destination.current(0)
 destination.grid(column=1, row=1, padx=x, pady=y)
+destination.focus()
 
 
 # количество пассажиров
@@ -114,25 +116,28 @@ tariff.grid(column=1, row=4, padx=x, pady=y)
 # проверка условий
 btn_check = Button(window, text='Проверить условия', bg='#DDA0DD', fg='#000', command=check)
 btn_check.grid(columnspan=1+2, row=5, padx=x, pady=y*1.5)
+btn_check.bind('<Return>', check)
 
 resume1 = Label(window, text='Проверка условий.', font='16', fg=f, bg=b)
 resume1.grid(columnspan=1+2, row=6, padx=x, pady=y)
 
 
 # стоимость
-btn_check = Button(window, text='Рассчитать стоимость', bg='#DDA0DD', fg='#000', command=priced)
-btn_check.grid(columnspan=1+2, row=7, padx=x, pady=y*1.5)
+btn_price = Button(window, text='Рассчитать стоимость', bg='#DDA0DD', fg='#000', command=priced)
+btn_price.grid(columnspan=1+2, row=7, padx=x, pady=y*1.5)
+btn_price.bind('<Return>', priced)
 
 resume2 = Label(window, text='Проверка стоимости.', font='16', fg=f, bg=b)
 resume2.grid(columnspan=1+2, row=8, padx=x, pady=y)
 
 
-def departure(): #всплывающее окно
+def departure(showinfo): #всплывающее окно
     messagebox.showinfo(' ', 'Прилетели!')
 
 
 # кнопка Полетели
 btn_exit = Button(window, text="Полетели!", bg='#f0f', fg='#000', command=departure)
 btn_exit.grid(columnspan=1+2, row=9, padx=x, pady=y)
+btn_exit.bind('<Return>', departure)
 
 window.mainloop()
