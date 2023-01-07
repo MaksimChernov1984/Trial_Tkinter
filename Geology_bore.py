@@ -11,10 +11,18 @@ class Main(tk.Frame):
 
     def init_main(self):
         toolbar = tk.Frame(bg='#FFE4C4')
-        toolbar.pack(side=tk.LEFT, fill=tk.Y)
-        btn_open_dialog = tk.Button(toolbar, text='Открыть журнал', command=self.open_dialog, bg='#F4A460',
+        toolbar.pack(side=tk.TOP, fill=tk.Y)
+        btn_open_log = tk.Button(toolbar, text='Журнал', command=self.open_log, bg='#F4A460',
                                     activebackground='#A52A2A', bd=0)
-        btn_open_dialog.pack(side=tk.LEFT)
+        btn_open_log.pack(side=tk.LEFT)
+
+
+# кнопка Открыть чертёж
+        btn_open_draw = tk.Button(toolbar, text='Чертёж', command=self.open_draw, bg='#F4A460',
+                                    activebackground='#A52A2A', bd=0)
+        btn_open_draw.pack(side=tk.LEFT)
+
+
         self.tree = ttk.Treeview(self, columns=('ID', 'layer_base', 'layer_description','sample_type', 'sample_depth'),
                                 height=15, show='headings')
         self.tree.column('ID', width=50, anchor=tk.CENTER)
@@ -40,17 +48,21 @@ class Main(tk.Frame):
         [self.tree.delete(i) for i in self.tree.get_children()]
         [self.tree.insert('', 'end', values=row) for row in self.db.c.fetchall()]
 
+# открыть журнал
+    def open_log(self):
+        Log()
 
-    def open_dialog(self):
-        Child()
+# открыть чертёж
+    def open_draw(self):
+        Draw()
 
-class Child(tk.Toplevel):
+class Log(tk.Toplevel):
     def __init__(self):
         super().__init__(root)
-        self.init_child()
+        self.init_log()
         self.view = app
 
-    def init_child(self):
+    def init_log(self):
         self.title('Журнал')
         self.geometry('1100x700+20+20')
         self.resizable(False, False)
@@ -86,7 +98,6 @@ class Child(tk.Toplevel):
         btn_cancel = ttk.Button(self, text='Закрыть журнал', command=self.destroy)
         btn_cancel.place(x=50, y=170)
 
-
         self.grab_set()
         self.focus_set()
 
@@ -105,6 +116,18 @@ class DB:
         self.c.execute('''INSERT INTO engineering_geology (layer_base, layer_description, sample_type, sample_depth) 
          VALUES (?, ?, ?, ?)''', (layer_base, layer_description, sample_type, sample_depth))
         self.conn.commit()
+
+# окно с чертежём
+class Draw(tk.Toplevel):
+    def __init__(self):
+        super().__init__(root)
+        self.init_draw()
+        self.view = app
+
+    def init_draw(self):
+        self.title('Чертёж')
+        self.geometry('1100x600+20+20')
+        self.resizable(False, False)
 
 
 if __name__=='__main__':
