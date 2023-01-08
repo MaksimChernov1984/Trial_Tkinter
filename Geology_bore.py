@@ -13,15 +13,25 @@ class Main(tk.Frame):
         toolbar = tk.Frame(bg='#FFE4C4')
         toolbar.pack(side=tk.TOP, fill=tk.X)
 
-# кнопка Открыть журнал
-        btn_open_log = tk.Button(toolbar, text='Добавление', command=self.open_log, bg='#F4A460',
-                                    activebackground='#FF6347', bd=0)
+        # кнопка Добавить строки
+        btn_open_log = tk.Button(toolbar, text='Добавить', command=self.open_log,
+                                 bg='#F4A460', activebackground='#FF6347', bd=0)
         btn_open_log.pack(side=tk.LEFT)
 
+        # кнопка Редактировать строки
+        btn_update_log = tk.Button(toolbar, text='Редактировать', command=self.update_log,
+                                 bg='#F4A460', activebackground='#FF6347', bd=0)
+        btn_update_log.pack(side=tk.LEFT)
 
-# кнопка Открыть чертёж
-        btn_open_draw = tk.Button(toolbar, text='  Чертёж  ', command=self.open_draw, bg='#F4A460',
-                                    activebackground='#FF6347', bd=0)
+        # кнопка Удалить строки
+        btn_delete_log = tk.Button(toolbar, text='Удалить', command=self.delete_records,
+                                   bg='#F4A460', activebackground='#FF6347', bd=0)
+        btn_delete_log.pack(side=tk.LEFT)
+
+
+        # кнопка Открыть чертёж
+        btn_open_draw = tk.Button(toolbar, text='  Чертёж  ', command=self.open_draw,
+                                  bg='#F4A460', activebackground='#FF6347', bd=0)
         btn_open_draw.pack(side=tk.LEFT)
 
 
@@ -41,23 +51,51 @@ class Main(tk.Frame):
 
         self.tree.pack()
 
+    # добавить записи
     def records(self, layer_base, layer_description, sample_type, sample_depth):
         self.db.insert_data(layer_base, layer_description, sample_type, sample_depth)
         self.view_records()  # после каждого добавления поля опять выполнить новую функцию отображения
 
+    # редактировать записи
+    def update_records(self, layer_base, layer_description, sample_type, sample_depth):
+        self.db.c.execute(
+            '''UPDATE engineering_geology SET layer_base=?, layer_description=?, sample_type=?, sample_depth=? WHERE ID=?''',
+            (layer_base, layer_description, sample_type, sample_depth, self.tree.set(self.tree.selection()[0], '#1')))
+        self.db.conn.commit()
+        self.view_records()
+
+    # удалить записи
+    def delete_records(self):
+        for selection_item in self.tree.selection():
+            self.db.c.execute('''DELETE FROM engineering_geology WHERE id=?''', (self.tree.set(selection_item, '#1'),))
+        self.db.conn.commit()
+        self.view_records()
+
+
+
+    # смотреть записи
     def view_records(self):
         self.db.c.execute('''SELECT * FROM engineering_geology''')
         [self.tree.delete(i) for i in self.tree.get_children()]
         [self.tree.insert('', 'end', values=row) for row in self.db.c.fetchall()]
 
-# открыть журнал
+    # открыть журнал
     def open_log(self):
         Log()
 
-# открыть чертёж
+    # открыть чертёж
     def open_draw(self):
         Draw()
 
+    # редактировать записи
+    def update_log(self):
+        Update()
+
+    # удалить записи
+    def delete_log(self):
+        Update()
+
+# окно Добавление
 class Log(tk.Toplevel):
     def __init__(self):
         super().__init__(root)
@@ -68,20 +106,21 @@ class Log(tk.Toplevel):
     def init_log(self):
         self.title('Добавление элемента')
         self.geometry('1100x700+20+20')
+        self.configure(bg='#FFE4C4')
         self.resizable(False, False)
 
         toolbar = tk.Frame(bg='#FFE4C4')
         toolbar.pack(side=tk.TOP, fill=tk.X)
 
-        label_layer_base = tk.Label(self, text='Подошва элемента').place(x=5, y=5)
-        label_layer_description = tk.Label(self, text='Описание элемента').place(x=5, y=35)
-        label_sample_type = tk.Label(self, text='Вид образца').place(x=5, y=65)
-        label_layer_description = tk.Label(self, text='Глубина образца').place(x=5, y=95)
+        label_layer_base = tk.Label(self, text='Подошва элемента', bg='#FFE4C4').place(x=5, y=5)
+        label_layer_description = tk.Label(self, text='Описание элемента', bg='#FFE4C4').place(x=5, y=35)
+        label_sample_type = tk.Label(self, text='Вид образца', bg='#FFE4C4').place(x=5, y=65)
+        label_layer_description = tk.Label(self, text='Глубина образца', bg='#FFE4C4').place(x=5, y=95)
 
         self.entry_layer_base = ttk.Entry(self)
         self.entry_layer_base.place(x=150, y=5)
 
-        self.entry_layer_description = ttk.Entry(self)
+        self.entry_layer_description = ttk.Entry(self, width=110)
         self.entry_layer_description.place(x=150, y=35)
 
         self.combobox_sample_type = ttk.Combobox(self, values=[u'Монолит', u'Нарушенный'])
@@ -92,22 +131,39 @@ class Log(tk.Toplevel):
         self.entry_sample_depth.place(x=150, y=95)
 
 
-        btn_ok_log = tk.Button(self, text='Добавить',bg='#F4A460', activebackground='#FF6347')
-        btn_ok_log.bind('<Button-1>', lambda event: self.view.records(self.entry_layer_base.get(),
+        self.btn_ok_log = tk.Button(self, text='Добавить',bg='#F4A460', activebackground='#FF6347')
+        self.btn_ok_log.bind('<Button-1>', lambda event: self.view.records(self.entry_layer_base.get(),
                                                                   self.entry_layer_description.get(),
                                                                   self.combobox_sample_type.get(),
                                                                   self.entry_sample_depth.get()))
-        btn_ok_log.place(x=50, y=130)
+        self.btn_ok_log.place(x=50, y=130)
 
 
-        btn_cancel_log = tk.Button(self, text='Завершить добавление', command=self.destroy, bg='#F4A460',
-                                    activebackground='#FF6347')
-        btn_cancel_log.place(x=50, y=170)
+        btn_cancel_log = tk.Button(self, text='Завершить добавление', command=self.destroy,
+                                   bg='#F4A460', activebackground='#FF6347', bd=0)
+        btn_cancel_log.place(x=50, y=200)
 
         self.grab_set()
         self.focus_set()
 
+# редактирование
+class Update(Log):
+    def __init__(self):
+        super().__init__()
+        self.init_edit()  # чтобы отображалось
+        self.view = app
 
+    def init_edit(self):
+        self.title('Редактировать')
+        btn_edit = tk.Button(self, text='Редактировать', bg='#F4A460', activebackground='#FF6347', bd=0)
+        btn_edit.place(x=50, y=165)
+        btn_edit.bind('<Button-1>', lambda event: self.view.update_records(self.entry_layer_base.get(),
+                                                                           self.entry_layer_description.get(),
+                                                                           self.combobox_sample_type.get(),
+                                                                           self.entry_sample_depth.get()))
+        self.btn_ok_log.destroy()
+
+# база данных
 class DB:
     def __init__(self):
         self.conn = sqlite3.connect('engineering_geology.db')
@@ -123,6 +179,7 @@ class DB:
          VALUES (?, ?, ?, ?)''', (layer_base, layer_description, sample_type, sample_depth))
         self.conn.commit()
 
+
 # окно с чертежём
 class Draw(tk.Toplevel):
     def __init__(self):
@@ -133,6 +190,7 @@ class Draw(tk.Toplevel):
     def init_draw(self):
         self.title('Чертёж')
         self.geometry('1100x600+20+20')
+        self.configure(bg='#FFE4C4')
         self.resizable(False, False)
 
 # кнопка Закрыть чертёж
@@ -148,5 +206,6 @@ if __name__=='__main__':
     app.pack()
     root.title('Электронный журнал ')
     root.geometry('1100x600+20+20')
+    root.configure(bg='#FFE4C4')
     root.resizable(False, False)
     root.mainloop()
