@@ -11,28 +11,30 @@ class Main(tk.Frame):
 
     def init_main(self):
         toolbar = tk.Frame(bg='#FFE4C4')
-        toolbar.pack(side=tk.TOP, fill=tk.Y)
-        btn_open_log = tk.Button(toolbar, text='Журнал', command=self.open_log, bg='#F4A460',
-                                    activebackground='#A52A2A', bd=0)
+        toolbar.pack(side=tk.TOP, fill=tk.X)
+
+# кнопка Открыть журнал
+        btn_open_log = tk.Button(toolbar, text='Добавление', command=self.open_log, bg='#F4A460',
+                                    activebackground='#FF6347', bd=0)
         btn_open_log.pack(side=tk.LEFT)
 
 
 # кнопка Открыть чертёж
-        btn_open_draw = tk.Button(toolbar, text='Чертёж', command=self.open_draw, bg='#F4A460',
-                                    activebackground='#A52A2A', bd=0)
+        btn_open_draw = tk.Button(toolbar, text='  Чертёж  ', command=self.open_draw, bg='#F4A460',
+                                    activebackground='#FF6347', bd=0)
         btn_open_draw.pack(side=tk.LEFT)
 
 
         self.tree = ttk.Treeview(self, columns=('ID', 'layer_base', 'layer_description','sample_type', 'sample_depth'),
                                 height=15, show='headings')
         self.tree.column('ID', width=50, anchor=tk.CENTER)
-        self.tree.column('layer_base', width=100, anchor=tk.CENTER)
-        self.tree.column('layer_description', width=500, anchor=tk.W)
-        self.tree.column('sample_type', width=100, anchor=tk.CENTER)
-        self.tree.column('sample_depth', width=100, anchor=tk.CENTER)
+        self.tree.column('layer_base', width=150, anchor=tk.CENTER)
+        self.tree.column('layer_description', width=610, anchor=tk.W)
+        self.tree.column('sample_type', width=120, anchor=tk.CENTER)
+        self.tree.column('sample_depth', width=150, anchor=tk.CENTER)
 
         self.tree.heading('ID', text='ID')
-        self.tree.heading('layer_base', text='Подошва элемента')
+        self.tree.heading('layer_base', text='Подошва ИГЭ')
         self.tree.heading('layer_description', text='Описание')
         self.tree.heading('sample_type', text='Вид образца')
         self.tree.heading('sample_depth', text='Глубина образца')
@@ -62,11 +64,14 @@ class Log(tk.Toplevel):
         self.init_log()
         self.view = app
 
+
     def init_log(self):
-        self.title('Журнал')
+        self.title('Добавление элемента')
         self.geometry('1100x700+20+20')
         self.resizable(False, False)
 
+        toolbar = tk.Frame(bg='#FFE4C4')
+        toolbar.pack(side=tk.TOP, fill=tk.X)
 
         label_layer_base = tk.Label(self, text='Подошва элемента').place(x=5, y=5)
         label_layer_description = tk.Label(self, text='Описание элемента').place(x=5, y=35)
@@ -87,16 +92,17 @@ class Log(tk.Toplevel):
         self.entry_sample_depth.place(x=150, y=95)
 
 
-        btn_ok = ttk.Button(self, text='Добавить')
-        btn_ok.bind('<Button-1>', lambda event: self.view.records(self.entry_layer_base.get(),
+        btn_ok_log = tk.Button(self, text='Добавить',bg='#F4A460', activebackground='#FF6347')
+        btn_ok_log.bind('<Button-1>', lambda event: self.view.records(self.entry_layer_base.get(),
                                                                   self.entry_layer_description.get(),
                                                                   self.combobox_sample_type.get(),
                                                                   self.entry_sample_depth.get()))
-        btn_ok.place(x=50, y=130)
+        btn_ok_log.place(x=50, y=130)
 
 
-        btn_cancel = ttk.Button(self, text='Закрыть журнал', command=self.destroy)
-        btn_cancel.place(x=50, y=170)
+        btn_cancel_log = tk.Button(self, text='Завершить добавление', command=self.destroy, bg='#F4A460',
+                                    activebackground='#FF6347')
+        btn_cancel_log.place(x=50, y=170)
 
         self.grab_set()
         self.focus_set()
@@ -129,13 +135,18 @@ class Draw(tk.Toplevel):
         self.geometry('1100x600+20+20')
         self.resizable(False, False)
 
+# кнопка Закрыть чертёж
+        btn_cancel_draw = tk.Button(self, text='Закрыть чертёж', command=self.destroy, bg='#F4A460',
+                                    activebackground='#FF6347')
+        btn_cancel_draw.place(x=10, y=10)
+
 
 if __name__=='__main__':
     root = tk.Tk()
     db = DB()
     app = Main(root)
     app.pack()
-    root.title('Геология')
-    root.geometry('1100x700+20+20')
+    root.title('Электронный журнал ')
+    root.geometry('1100x600+20+20')
     root.resizable(False, False)
     root.mainloop()
