@@ -102,8 +102,8 @@ class Main(tk.Frame):
 
 
     def search_records(self, bore):
-        bore = ('%'+bore+'%',)  # поиск bore из любой позиции (напр., в центре слова)
-        self.db.c.execute('''SELECT * FROM engineering_geology WHERE bore LIKE ?''', bore)
+        bore = (bore,)  # если надо поиск из любой позиции (напр., в центре слова), то (%+bore+%,)
+        self.db.c.execute('''SELECT * FROM engineering_geology WHERE bore LIKE ? ORDER BY layer_base''', bore)
         [self.tree.delete(i) for i in self.tree.get_children()]  # проходим циклом всю таблицу и очищаем её
         [self.tree.insert('', 'end', values=row) for row in self.db.c.fetchall()]  # добавляем данные
 
@@ -179,6 +179,11 @@ class Log(tk.Toplevel):
                                                                   self.entry_layer_description.get(),
                                                                   self.combobox_sample_type.get(),
                                                                   self.entry_sample_depth.get()))
+        self.btn_ok_log.bind('<Return>', lambda event: self.view.records(self.entry_bore.get(),
+                                                                           self.entry_layer_base.get(),
+                                                                           self.entry_layer_description.get(),
+                                                                           self.combobox_sample_type.get(),
+                                                                           self.entry_sample_depth.get()))
         self.btn_ok_log.place(x=50, y=160)
 
 
@@ -210,12 +215,18 @@ class Update(Log):
                                                                            self.combobox_sample_type.get(),
                                                                            self.entry_sample_depth.get()))
         self.btn_edit.bind('<Button-1>', lambda event: self.destroy(), add='+')
-
+        self.btn_edit.bind('<Return>', lambda event: self.view.update_records(self.entry_bore.get(),
+                                                                                self.entry_layer_base.get(),
+                                                                                self.entry_layer_description.get(),
+                                                                                self.combobox_sample_type.get(),
+                                                                                self.entry_sample_depth.get()))
+        self.btn_edit.bind('<Return>', lambda event: self.destroy(), add='+')
         self.btn_ok_log.destroy()
 
 
     def default_data(self):
-        self.db.c.execute('''SELECT * FROM engineering_geology WHERE id=?''', (self.view.tree.set(self.view.tree.selection()[0],'#1')))
+        self.db.c.execute('''SELECT * FROM engineering_geology WHERE id=?''',
+                          (self.view.tree.set(self.view.tree.selection()[0],'#1')))
         row = self.db.c.fetchone()  # fetchone возвращает кортеж
         self.entry_bore.insert(0, row[1])
         self.entry_layer_base.insert(0, row[2])
@@ -248,6 +259,8 @@ class Search(tk.Toplevel):
         btn_search = tk.Button(self, text='Поиск', bg='#F4A460', activebackground='#FF6347', bd=0)
         btn_search.bind('<Button-1>', lambda event: self.view.search_records(self.entry_search.get()))
         btn_search.bind('<Button-1>', lambda event: self.destroy(), add='+')
+        btn_search.bind('<Return>', lambda event: self.view.search_records(self.entry_search.get()))
+        btn_search.bind('<Return>', lambda event: self.destroy(), add='+')
         btn_search.place(x=10, y=70)
 
         btn_cancel = tk.Button(self, text='Закрыть', bg='#F4A460', activebackground='#FF6347', bd=0,
@@ -269,8 +282,8 @@ class DB:
 
 
     def insert_data(self, bore, layer_base, layer_description, sample_type, sample_depth):
-        self.c.execute('''INSERT INTO engineering_geology (bore, layer_base, layer_description, sample_type, sample_depth) 
-         VALUES (?, ?, ?, ?, ?)''', (bore, layer_base, layer_description, sample_type, sample_depth))
+        self.c.execute('''INSERT INTO engineering_geology (bore, layer_base, layer_description, sample_type, 
+        sample_depth) VALUES (?, ?, ?, ?, ?)''', (bore, layer_base, layer_description, sample_type, sample_depth))
         self.conn.commit()
 
 
