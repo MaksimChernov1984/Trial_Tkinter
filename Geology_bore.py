@@ -52,17 +52,21 @@ class Main(tk.Frame):
         self.tree.column('bore', width=150, anchor=tk.CENTER)
         self.tree.column('layer_base', width=150, anchor=tk.CENTER)
         self.tree.column('layer_description', width=500, anchor=tk.W)
-        self.tree.column('sample_type', width=110, anchor=tk.CENTER)
-        self.tree.column('sample_depth', width=140, anchor=tk.CENTER)
+        self.tree.column('sample_type', width=105, anchor=tk.CENTER)
+        self.tree.column('sample_depth', width=130, anchor=tk.CENTER)
 
         self.tree.heading('ID', text='ID')
         self.tree.heading('bore', text='Скважина')
         self.tree.heading('layer_base', text='Подошва ИГЭ')
         self.tree.heading('layer_description', text='Описание')
         self.tree.heading('sample_type', text='Вид образца')
-        self.tree.heading('sample_depth', text='Глубина образца')
+        self.tree.heading('sample_depth', text='Глуб. образца')
 
-        self.tree.pack()
+        self.tree.pack(side=tk.LEFT)
+
+        scroll = tk.Scrollbar(self, command=self.tree.yview)
+        scroll.pack(side=tk.LEFT, fill=tk.Y)
+        self.tree.configure(yscrollcommand=scroll.set)
 
 
     # добавить записи
