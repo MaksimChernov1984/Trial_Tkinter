@@ -15,7 +15,6 @@ class Main(tk.Frame):
         p_y = 3  # интервал по у
         self.configure(bg='#002')
 
-
         lbl = tk.Label(self, font=fnt, fg=f, bg=b)
         lbl.configure(text='Вас приветствует компания "ПОЛЕТЕЛИ ПРИЛЕТЕЛИ"!')
         lbl.grid(column=0, columnspan=2, row=0, padx=p_x, pady=2*p_y)
@@ -40,14 +39,16 @@ class Main(tk.Frame):
 
         self.passengers = ttk.Spinbox(self, from_=1, to=20, width=10)
         self.passengers.grid(column=1, row=2, padx=p_x, pady=p_y)
+        self.passengers.set('1')
 
         # количество тонн груза
         lbl = tk.Label(self, font=fnt, fg=f, bg=b)
         lbl.configure(text='Сколько тонн груза? (максимум 100)')
         lbl.grid(column=0, row=3, padx=p_x, pady=p_y, stick="e")
 
-        self.cargo = ttk.Entry(self, width=11)
+        self.cargo = ttk.Spinbox(self, from_=1, to=100, width=11)
         self.cargo.grid(column=1, row=3, padx=p_x, pady=p_y)
+        self.cargo.set('1')
 
         # выбор тарифа
         lbl = tk.Label(self, font=fnt, fg=f, bg=b)
@@ -78,8 +79,8 @@ class Main(tk.Frame):
         self.resume2.grid(column=0, row=8, padx=p_x, pady=p_y)
 
         # кнопка Ракета
-        btn_open_rocket = tk.Button(self, text='Ракета', command=self.open_rocket, bg='#CD5C5C',
-                                 activebackground='#A52A2A')
+        btn_open_rocket = tk.Button(self, text='Ракета', command=self.open_rocket,
+                                    bg='#CD5C5C', activebackground='#A52A2A')
         btn_open_rocket.grid(column=0, row=9, padx=p_x, pady=2*p_y)
 
     def check(self):
@@ -123,18 +124,19 @@ class Main(tk.Frame):
             t = 3
 
         price = d * p * c * t * rub
-        if c <= 100:
-            price2 = '{0:,}'.format(price).replace(',', ' ')
+
+        if p <= 20:
+            if c <= 100:
+                price2 = '{0:,}'.format(price).replace(',', ' ')
+            else:
+                price2 = 'Слишком много груза.'
         else:
-            price2 = 'Слишком много груза.'
+            price2 = 'Слишком много пассажиров.'
+
         self.resume2.config(text=price2)
-
-
 
     def open_rocket(self):
         Rocket()
-
-
 
 
 class Rocket(tk.Toplevel):
@@ -154,7 +156,6 @@ class Rocket(tk.Toplevel):
         fnt = 10  # размер шрифта
         p_x = 3  # интервал по х
         p_y = 3  # интервал по у
-
 
         lbl = tk.Label(self, text='Давайте нарисуем ракету!', font=fnt, fg=f, bg=b).place(x=50, y=10)
 
@@ -225,13 +226,12 @@ class Rocket(tk.Toplevel):
         self.rocket_text = ttk.Entry(self, width=10)
         self.rocket_text.place(x=250, y=340)
 
-
         btn = tk.Button(self, text='Рисуем ракету', bg='#CD5C5C', activebackground='#A52A2A',
                         fg='#000', command=self.rocket)
         btn.place(x=20, y=450)
 
-        btn_cancel_rocket = tk.Button(self, text='Вернуться к полёту', command=self.destroy, bg='#CD5C5C',
-                                 activebackground='#A52A2A')
+        btn_cancel_rocket = tk.Button(self, text='Вернуться к полёту', command=self.destroy,
+                                      bg='#CD5C5C', activebackground='#A52A2A')
         btn_cancel_rocket.place(x=20, y=500)
 
     def rocket(self):
@@ -251,7 +251,7 @@ class Rocket(tk.Toplevel):
         w_canvas = 700    # ширина холста
         h_canvas = 600  # высота холста
         x = 250  # координата вершины конуса по Х
-        y = 50 # координата вершины конуса по У
+        y = 50  # координата вершины конуса по У
 
         # лист
         cv = tk.Canvas(self, width=w_canvas, height=h_canvas, bg=color_space)
@@ -259,78 +259,106 @@ class Rocket(tk.Toplevel):
 
         # конус
         cv.create_polygon(x, y,
-                        x + 0.5 * w0, y + h0,
-                        x - 0.5 * w0, y + h0,
-                        fill=color_rocket, width=1, outline='#000')
+                          x + 0.5 * w0, y + h0,
+                          x - 0.5 * w0, y + h0,
+                          fill=color_rocket, width=1, outline='#000')
 
         # иллюминатор
         cv.create_oval(x - 0.05 * w0, y + 0.6 * h0,
-                        x + 0.05 * w0, y + 0.6 * h0 + 0.1 * w0,
-                        fill=color_space, width=1, outline='#000')
+                       x + 0.05 * w0, y + 0.6 * h0 + 0.1 * w0,
+                       fill=color_space, width=1, outline='#000')
 
         # ступень 4
         cv.create_polygon(x + 0.5 * w0, y + h0,
-                        x + 0.5 * w0, y + h0 + 0.3 * h4,
-                        x + 0.6 * w0, y + h0 + 0.4 * h4,
-                        x + 0.6 * w0, y + h0 + 0.5 * h4,
-                        x + 0.5 * w0, y + h0 + 0.5 * h4,
-                        x + 0.5 * w0, y + h0 + h4,
-                        x - 0.5 * w0, y + h0 + h4,
-                        x - 0.5 * w0, y + h0 + 0.5 * h4,
-                        x - 0.6 * w0, y + h0 + 0.5 * h4,
-                        x - 0.6 * w0, y + h0 + 0.4 * h4,
-                        x - 0.5 * w0, y + h0 + 0.3 * h4,
-                        x - 0.5 * w0, y + h0,
-                        x - 0.5 * w0, y + h0,
-                        fill=color_rocket, width=1, outline='#000')
+                          x + 0.5 * w0, y + h0 + 0.3 * h4,
+                          x + 0.6 * w0, y + h0 + 0.4 * h4,
+                          x + 0.6 * w0, y + h0 + 0.5 * h4,
+                          x + 0.5 * w0, y + h0 + 0.5 * h4,
+                          x + 0.5 * w0, y + h0 + h4,
+                          x - 0.5 * w0, y + h0 + h4,
+                          x - 0.5 * w0, y + h0 + 0.5 * h4,
+                          x - 0.6 * w0, y + h0 + 0.5 * h4,
+                          x - 0.6 * w0, y + h0 + 0.4 * h4,
+                          x - 0.5 * w0, y + h0 + 0.3 * h4,
+                          x - 0.5 * w0, y + h0,
+                          x - 0.5 * w0, y + h0,
+                          fill=color_rocket, width=1, outline='#000')
 
         # ступень 3
-        cv.create_polygon(x - 0.5 * w0, y + h0 + h4,
-                        x + 0.5 * w0, y + h0 + h4,
-                        x + 0.6 * w0, y + h0 + h4 + 0.1 * h3,
-                        x + 0.6 * w0, y + h0 + h4 + h3,
-                        x - 0.6 * w0, y + h0 + h4 + h3,
-                        x - 0.6 * w0, y + h0 + h4 + 0.1 * h3,
-                        fill=color_rocket, width=1, outline='#000')
+        cv.create_polygon(x + 0.5 * w0, y + h0 + h4,
+                          x + 0.6 * w0, y + h0 + h4 + 0.1 * h3,
+                          x + 0.6 * w0, y + h0 + h4 + h3,
+                          x - 0.6 * w0, y + h0 + h4 + h3,
+                          x - 0.6 * w0, y + h0 + h4 + 0.1 * h3,
+                          x - 0.5 * w0, y + h0 + h4,
+                          fill=color_rocket, width=1, outline='#000')
 
         # ступень 2
-        cv.create_polygon(x - 0.6 * w0, y + h0 + h4 + h3,
-                        x + 0.6 * w0, y + h0 + h4 + h3,
-                        x + 0.7 * w0, y + h0 + h4 + h3 + 0.1 * h2,
-                        x + 0.7 * w0, y + h0 + h4 + h3 + h2,
-                        x - 0.7 * w0, y + h0 + h4 + h3 + h2,
-                        x - 0.7 * w0, y + h0 + h4 + h3 + 0.1 * h2,
-                        fill=color_rocket, width=1, outline='#000')
+        cv.create_polygon(x + 0.6 * w0, y + h0 + h4 + h3,
+                          x + 0.7 * w0, y + h0 + h4 + h3 + 0.1 * h2,
+                          x + 0.7 * w0, y + h0 + h4 + h3 + h2,
+                          x - 0.7 * w0, y + h0 + h4 + h3 + h2,
+                          x - 0.7 * w0, y + h0 + h4 + h3 + 0.1 * h2,
+                          x - 0.6 * w0, y + h0 + h4 + h3,
+                          fill=color_rocket, width=1, outline='#000')
 
         # ступень 1
-        cv.create_polygon(x - 0.7 * w0, y + h0 + h4 + h3 + h2,
-                        x + 0.7 * w0, y + h0 + h4 + h3 + h2,
-                        x + 0.8 * w0, y + h0 + h4 + h3 + h2 + 0.1 * h1,
-                        x + 0.8 * w0, y + h0 + h4 + h3 + h2 + h1,
-                        x - 0.8 * w0, y + h0 + h4 + h3 + h2 + h1,
-                        x - 0.8 * w0, y + h0 + h4 + h3 + h2 + 0.1 * h1,
-                        fill=color_rocket, width=1, outline='#000')
+        cv.create_polygon(x + 0.7 * w0, y + h0 + h4 + h3 + h2,
+                          x + 0.8 * w0, y + h0 + h4 + h3 + h2 + 0.1 * h1,
+                          x + 0.8 * w0, y + h0 + h4 + h3 + h2 + h1,
+                          x + 0.6 * w0, y + h0 + h4 + h3 + h2 + h1,
+
+                          x + 0.7 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+                          x + 0.75 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x + 0.3 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x + 0.35 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+
+                          x + 0.45 * w0, y + h0 + h4 + h3 + h2 + h1,
+                          x - 0.45 * w0, y + h0 + h4 + h3 + h2 + h1,
+
+                          x - 0.35 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+                          x - 0.3 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x - 0.75 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x - 0.7 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+
+                          x - 0.6 * w0, y + h0 + h4 + h3 + h2 + h1,
+                          x - 0.8 * w0, y + h0 + h4 + h3 + h2 + h1,
+                          x - 0.8 * w0, y + h0 + h4 + h3 + h2 + 0.1 * h1,
+                          x - 0.7 * w0, y + h0 + h4 + h3 + h2,
+                          fill=color_rocket, width=1, outline='#000')
 
         # боковой ускоритель левый
         cv.create_polygon(x - 0.8 * w0 - 0.5 * w_jet1, y + h0 + h4 + h3 + h2 + h1 - h_jet1,
-                        x - 0.8 * w0, y + h0 + h4 + h3 + h2 + h1 - h_jet1 + 0.5 * w_jet1,
-                        x - 0.8 * w0, y + h0 + h4 + h3 + h2 + h1,
-                        x - 0.8 * w0 - w_jet1, y + h0 + h4 + h3 + h2 + h1,
-                        x - 0.8 * w0 - w_jet1, y + h0 + h4 + h3 + h2 + h1 - h_jet1 + 0.5 * w_jet1,
-                        fill=color_rocket, width=1, outline='#000')
+                          x - 0.8 * w0, y + h0 + h4 + h3 + h2 + h1 - h_jet1 + 0.5 * w_jet1,
+                          x - 0.8 * w0, y + h0 + h4 + h3 + h2 + h1,
+                          x - 0.8 * w0 - 0.4 * w_jet1, y + h0 + h4 + h3 + h2 + h1,
+                          x - 0.8 * w0 - 0.25 * w_jet1, y + h0 + h4 + h3 + h2 + 1.1*h1,
+                          x - 0.8 * w0 - 0.2 * w_jet1, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x - 0.8 * w0 - 0.8 * w_jet1, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x - 0.8 * w0 - 0.75 * w_jet1, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+                          x - 0.8 * w0 - 0.6 * w_jet1, y + h0 + h4 + h3 + h2 + h1,
+                          x - 0.8 * w0 - w_jet1, y + h0 + h4 + h3 + h2 + h1,
+                          x - 0.8 * w0 - w_jet1, y + h0 + h4 + h3 + h2 + h1 - h_jet1 + 0.5 * w_jet1,
+                          fill=color_rocket, width=1, outline='#000')
 
         # боковой ускоритель правый
         cv.create_polygon(x + 0.8 * w0 + 0.5 * w_jet1, y + h0 + h4 + h3 + h2 + h1 - h_jet1,
-                        x + 0.8 * w0, y + h0 + h4 + h3 + h2 + h1 - h_jet1 + 0.5 * w_jet1,
-                        x + 0.8 * w0, y + h0 + h4 + h3 + h2 + h1,
-                        x + 0.8 * w0 + w_jet1, y + h0 + h4 + h3 + h2 + h1,
-                        x + 0.8 * w0 + w_jet1, y + h0 + h4 + h3 + h2 + h1 - h_jet1 + 0.5 * w_jet1,
-                        fill=color_rocket, width=1, outline='#000')
+                          x + 0.8 * w0, y + h0 + h4 + h3 + h2 + h1 - h_jet1 + 0.5 * w_jet1,
+                          x + 0.8 * w0, y + h0 + h4 + h3 + h2 + h1,
+                          x + 0.8 * w0 + 0.4 * w_jet1, y + h0 + h4 + h3 + h2 + h1,
+                          x + 0.8 * w0 + 0.25 * w_jet1, y + h0 + h4 + h3 + h2 + 1.1*h1,
+                          x + 0.8 * w0 + 0.2 * w_jet1, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x + 0.8 * w0 + 0.8 * w_jet1, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x + 0.8 * w0 + 0.75 * w_jet1, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+                          x + 0.8 * w0 + 0.6 * w_jet1, y + h0 + h4 + h3 + h2 + h1,
+                          x + 0.8 * w0 + w_jet1, y + h0 + h4 + h3 + h2 + h1,
+                          x + 0.8 * w0 + w_jet1, y + h0 + h4 + h3 + h2 + h1 - h_jet1 + 0.5 * w_jet1,
+                          fill=color_rocket, width=1, outline='#000')
 
         cv.create_text(x, y + h0 + 0.5 * h4, text=self.rocket_text.get(), fill=color_space)
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     root = tk.Tk()
     app = Main(root)
     app.pack()
