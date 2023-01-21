@@ -159,84 +159,96 @@ class Rocket(tk.Toplevel):
 
         lbl = tk.Label(self, text='Давайте нарисуем ракету!', font=fnt, fg=f, bg=b).place(x=50, y=10)
 
+        # выбор Конус / Обтекатель
+        lbl = tk.Label(self, text='Конус или обтекатель?', font=fnt, fg=f, bg=b).place(x=10, y=40)
+        self.choose_hh0 = ttk.Combobox(self, width=10)
+        self.choose_hh0['values'] = ('(выберите)', 'Конус', 'Обтекатель')
+        self.choose_hh0.current(0)
+        self.choose_hh0.place(x=250, y=40)
+        self.choose_hh0.focus()        
+
         # высота конуса
-        lbl = tk.Label(self, text='Высота конуса', font=fnt, fg=f, bg=b).place(x=10, y=40)
+        lbl = tk.Label(self, text='Высота конуса', font=fnt, fg=f, bg=b).place(x=10, y=70)
 
         self.hh0 = ttk.Entry(self, width=10)
-        self.hh0.place(x=250, y=40)
+        self.hh0.place(x=250, y=70)
         self.hh0.focus()
 
         # ширина конуса
-        lbl = tk.Label(self, text='Ширина конуса', font=fnt, fg=f, bg=b).place(x=10, y=70)
+        lbl = tk.Label(self, text='Ширина конуса', font=fnt, fg=f, bg=b).place(x=10, y=100)
 
         self.ww0 = ttk.Entry(self, width=10)
-        self.ww0.place(x=250, y=70)
+        self.ww0.place(x=250, y=100)
 
         # высота ступени 4
-        lbl = tk.Label(self, text='Высота четвёртой ступени', font=fnt, fg=f, bg=b).place(x=10, y=100)
+        lbl = tk.Label(self, text='Высота четвёртой ступени', font=fnt, fg=f, bg=b).place(x=10, y=130)
 
         self.hh4 = ttk.Entry(self, width=10)
-        self.hh4.place(x=250, y=100)
+        self.hh4.place(x=250, y=130)
 
         # высота ступени 3
-        lbl = tk.Label(self, text='Высота третьей ступени', font=fnt, fg=f, bg=b).place(x=10, y=130)
+        lbl = tk.Label(self, text='Высота третьей ступени', font=fnt, fg=f, bg=b).place(x=10, y=160)
 
         self.hh3 = ttk.Entry(self, width=10)
-        self.hh3.place(x=250, y=130)
+        self.hh3.place(x=250, y=160)
 
         # высота ступени 2
-        lbl = tk.Label(self, text='Высота второй ступени', font=fnt, fg=f, bg=b).place(x=10, y=160)
+        lbl = tk.Label(self, text='Высота второй ступени', font=fnt, fg=f, bg=b).place(x=10, y=190)
 
         self.hh2 = ttk.Entry(self, width=10)
-        self.hh2.place(x=250, y=160)
+        self.hh2.place(x=250, y=190)
 
         # высота ступени 1
-        lbl = tk.Label(self, text='Высота первой ступени', font=fnt, fg=f, bg=b).place(x=10, y=190)
+        lbl = tk.Label(self, text='Высота первой ступени', font=fnt, fg=f, bg=b).place(x=10, y=220)
 
         self.hh1 = ttk.Entry(self, width=10)
-        self.hh1.place(x=250, y=190)
+        self.hh1.place(x=250, y=220)
 
         # высота боковых ускорителей
-        lbl = tk.Label(self, text='Высота боковых ускорителей', font=fnt, fg=f, bg=b).place(x=10, y=220)
+        lbl = tk.Label(self, text='Высота боковых ускорителей', font=fnt, fg=f, bg=b).place(x=10, y=250)
 
         self.hh_jet1 = ttk.Entry(self, width=10)
-        self.hh_jet1.place(x=250, y=220)
+        self.hh_jet1.place(x=250, y=250)
 
         # ширина боковых ускорителей
-        lbl = tk.Label(self, text='Ширина боковых ускорителей', font=fnt, fg=f, bg=b).place(x=10, y=250)
+        lbl = tk.Label(self, text='Ширина боковых ускорителей', font=fnt, fg=f, bg=b).place(x=10, y=280)
 
         self.ww_jet1 = ttk.Entry(self, width=10)
-        self.ww_jet1.place(x=250, y=250)
+        self.ww_jet1.place(x=250, y=280)
 
         # цвет ракеты
-        lbl = tk.Label(self, text='Цвет ракеты', font=fnt, fg=f, bg=b).place(x=10, y=280)
+        lbl = tk.Label(self, text='Цвет ракеты', font=fnt, fg=f, bg=b).place(x=10, y=310)
 
         self.c_rocket = ttk.Entry(self, width=10)
-        self.c_rocket.place(x=250, y=280)
+        self.c_rocket.place(x=250, y=310)
 
         # цвет космоса
-        lbl = tk.Label(self, text='Цвет космоса', font=fnt, fg=f, bg=b).place(x=10, y=310)
+        lbl = tk.Label(self, text='Цвет космоса', font=fnt, fg=f, bg=b).place(x=10, y=340)
 
         self.c_space = ttk.Entry(self, width=10)
-        self.c_space.place(x=250, y=310)
+        self.c_space.place(x=250, y=340)
 
         # надпись
-        lbl = tk.Label(self, text='Бортовая надпись', font=fnt, fg=f, bg=b).place(x=10, y=340)
+        lbl = tk.Label(self, text='Бортовая надпись', font=fnt, fg=f, bg=b).place(x=10, y=370)
 
         self.rocket_text = ttk.Entry(self, width=10)
-        self.rocket_text.place(x=250, y=340)
+        self.rocket_text.place(x=250, y=370)
 
         btn = tk.Button(self, text='Рисуем ракету', bg='#CD5C5C', activebackground='#A52A2A',
                         fg='#000', command=self.rocket)
-        btn.place(x=20, y=450)
+        btn.place(x=20, y=480)
 
         btn_cancel_rocket = tk.Button(self, text='Вернуться к полёту', command=self.destroy,
                                       bg='#CD5C5C', activebackground='#A52A2A')
-        btn_cancel_rocket.place(x=20, y=500)
+        btn_cancel_rocket.place(x=20, y=530)
 
     def rocket(self):
         # Rocket()
         h0 = int(self.hh0.get())  # высота конуса
+        if self.choose_hh0.get() == 'Конус':
+            cowl = 0  # нулевой коэффициент обтекателя
+        elif self.choose_hh0.get() == 'Обтекатель':
+            cowl = int(self.hh0.get()) *0.6   # коэффициент обтекателя
         w0 = int(self.ww0.get())  # ширина конуса
         h4 = int(self.hh4.get())  # высота ступени 3
         h3 = int(self.hh3.get())  # высота ступени 2
@@ -257,10 +269,14 @@ class Rocket(tk.Toplevel):
         cv = tk.Canvas(self, width=w_canvas, height=h_canvas, bg=color_space)
         cv.place(x=400, y=0)
 
-        # конус
+        # конус / обтекатель
         cv.create_polygon(x, y,
+                          x + 0.5 * w0 + 0.2*cowl, y + h0 - cowl,
+                          x + 0.5 * w0 + 0.2*cowl, y + h0 - 0.2*cowl,
                           x + 0.5 * w0, y + h0,
                           x - 0.5 * w0, y + h0,
+                          x - 0.5 * w0 - 0.2*cowl, y + h0 - 0.2*cowl,
+                          x - 0.5 * w0 - 0.2*cowl, y + h0 - cowl,
                           fill=color_rocket, width=1, outline='#000')
 
         # иллюминатор
@@ -306,22 +322,29 @@ class Rocket(tk.Toplevel):
         cv.create_polygon(x + 0.7 * w0, y + h0 + h4 + h3 + h2,
                           x + 0.8 * w0, y + h0 + h4 + h3 + h2 + 0.1 * h1,
                           x + 0.8 * w0, y + h0 + h4 + h3 + h2 + h1,
-                          x + 0.6 * w0, y + h0 + h4 + h3 + h2 + h1,
 
-                          x + 0.7 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
-                          x + 0.75 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
-                          x + 0.3 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
-                          x + 0.35 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+                          x + 0.7 * w0, y + h0 + h4 + h3 + h2 + h1,
+                          x + 0.8 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+                          x + 0.85 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x + 0.4 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x + 0.45 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+                          x + 0.55 * w0, y + h0 + h4 + h3 + h2 + h1,
 
-                          x + 0.45 * w0, y + h0 + h4 + h3 + h2 + h1,
-                          x - 0.45 * w0, y + h0 + h4 + h3 + h2 + h1,
+                          x + 0.075 * w0, y + h0 + h4 + h3 + h2 + h1,
+                          x + 0.175 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+                          x + 0.225 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x - 0.225 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x - 0.175 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+                          x - 0.075 * w0, y + h0 + h4 + h3 + h2 + h1,                          
+                          
 
-                          x - 0.35 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
-                          x - 0.3 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
-                          x - 0.75 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
-                          x - 0.7 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+                          x - 0.55 * w0, y + h0 + h4 + h3 + h2 + h1,
+                          x - 0.45 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+                          x - 0.4 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x - 0.85 * w0, y + h0 + h4 + h3 + h2 + 1.2 * h1,
+                          x - 0.8 * w0, y + h0 + h4 + h3 + h2 + 1.1 * h1,
+                          x - 0.7 * w0, y + h0 + h4 + h3 + h2 + h1,
 
-                          x - 0.6 * w0, y + h0 + h4 + h3 + h2 + h1,
                           x - 0.8 * w0, y + h0 + h4 + h3 + h2 + h1,
                           x - 0.8 * w0, y + h0 + h4 + h3 + h2 + 0.1 * h1,
                           x - 0.7 * w0, y + h0 + h4 + h3 + h2,
